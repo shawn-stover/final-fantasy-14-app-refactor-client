@@ -1,25 +1,89 @@
-import logo from './logo.svg';
-import './App.css';
+// Imports
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import jwt from 'jsonwebtoken'
+import './App.css'
+import Navbar from './components/Navbar'
+import Login from './components/Login'
+import Register from './components/Register' 
+import Profile from './components/Profile'
+import Welcome from './components/Welcome' 
+// import Char from './components/Char' 
+// import Job from './components/JobData'
+// import Note from './components/Note'
+// import GenNote from './components/GenNote'
 
-function App() {
+export default function App() {
+  // State holds user data if the user is logged in
+  const [currentUser, setCurrentUser] = useState(null)
+
+  // If user navigates away automatically log them in (if the jwt is valid)
+  useEffect(() => {
+    // Get the token from local storage
+    const token = localStorage.getItem('jwtToken')
+
+    // Check for token
+    if(token) {
+      setCurrentUser(jwt.decode(token))
+    } else {
+      // Else set user in state to be null
+      setCurrentUser(null)
+    }
+  }, [])
+
+  // Function to log the user out
+  const handleLogout = () => {
+    // Delete the jwt that's in local storage
+    if(localStorage.getItem('jwtToken')) {
+      localStorage.removeItem('jwtToken')
+
+      // Set the user in state to be null
+      setCurrentUser(null)
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <Router>
 
-export default App;
+      <header>
+        <Navbar
+          currentUser={ currentUser }
+          handleLogout={ handleLogout }
+        />
+      </header>
+
+      <div className="App">
+        <Switch>
+
+          <Route
+            exact path="/"
+            component={ Welcome }
+          />
+
+          <Route
+            exact path="/register"
+            render={ props => <Register {...props} currentUser={ currentUser } setCurrentUser={ setCurrentUser } /> }
+          />
+
+          <Route
+            exact path="/login"
+            render={ props => <Login {...props} currentUser={ currentUser } setCurrentUser={ setCurrentUser } /> }
+          />
+
+          {/* conditionally render a redirect for auth locked routes */}
+          <Route
+            exact path="/profile"
+            render={ props => currentUser ? <Profile {...props} currentUser={ currentUser } handleLogout={ handleLogout }/> : <Redirect to="/login" />}
+          />
+        </Switch>
+      </div>
+
+      <span style={{height: "125px", width: "100px", display: "block"}}></span>
+    </Router>
+  )
+}
