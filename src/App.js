@@ -12,7 +12,9 @@ import Navbar from './components/Navbar'
 import Login from './components/Login'
 import Register from './components/Register' 
 import Profile from './components/Profile'
-import Welcome from './components/Welcome' 
+import Welcome from './components/Welcome'
+import CharSearch from './components/CharSearch' 
+
 // import Char from './components/Char' 
 // import Job from './components/JobData'
 // import Note from './components/Note'
@@ -80,6 +82,12 @@ export default function App() {
             exact path="/profile"
             render={ props => currentUser ? <Profile {...props} currentUser={ currentUser } handleLogout={ handleLogout }/> : <Redirect to="/login" />}
           />
+
+          <Route
+            exact path="/chars/charsearch"
+            render={ props => <CharSearch {...props} currentUser={ currentUser } handleLogout={ handleLogout }/>}
+          />  
+
         </Switch>
       </div>
 

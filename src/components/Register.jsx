@@ -156,7 +156,7 @@ export default function Register(props) {
 
                     <SignupB type='submit' value='Sign Up' />
 
-                    <p>Don't have an account? <strong> Sign up</strong></p>
+                    <p>Don't have an account? <strong>Sign up</strong></p>
                 </form>
             </div>
         </div>    

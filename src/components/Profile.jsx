@@ -1,10 +1,35 @@
 import { useState, useEffect } from "react"
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios'
+import styled from 'styled-components'
 import Login from './Login'
-// import MyChars from './MyChars'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../App.css'
+
+const CharB = styled.input `
+    height: 38px;
+    width: 150px;
+    background: #1B6625;
+    color: #ffffff;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: 900;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 0;
+`
+const StyledLink = styled(Link)`
+height: 38px;
+width: 150px;
+background: #1B6625;
+color: #ffffff;
+font-family: Poppins;
+font-size: 18px;
+font-weight: 900;
+border-radius: 10px;
+margin-bottom: 40px;
+border: 0;
+`
 
 export default function Profile(props) {
     // state is information from the server
@@ -40,8 +65,6 @@ export default function Profile(props) {
 
     // redirect if there is no user in state
     if(!props.currentUser) return <Redirect to='/login' component={ Login } currentUser={ props.currentUser } />
-    
-    console.log(props.currentUser)
 
     return (
         <div className="secondborder">
@@ -50,10 +73,16 @@ export default function Profile(props) {
                     <h4>Welcome {props.currentUser.name}!</h4>
                     <p>{message}</p>
                 </div>
-                {/* <div>
-                    <h1 style={{textAlign: "left", margin: "50px 0px 100px", }}><strong>Your Events</strong></h1>
-                    <MyChars {...props}/>
-                </div> */}
+
+                <br />
+
+                <div>
+                    <h4>My Characters</h4>
+                    
+                    <Link to='/chars/charsearch'> 
+                        Character Search
+                    </Link>
+                </div>
             </div>
         </div>        
     )
